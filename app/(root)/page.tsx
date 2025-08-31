@@ -16,8 +16,8 @@ async function Home() {
   const user = await getCurrentUser();
 
   const [userInterviews, allInterview] = await Promise.all([
-    getInterviewsByUserId(user?.id!),
-    getLatestInterviews({ userId: user?.id! }),
+    getInterviewsByUserId(user?.id!), // it is definded in general.actions
+    getLatestInterviews({ userId: user?.id! }), //defined in general.actions
   ]);
 
   const hasPastInterviews = userInterviews?.length! > 0;

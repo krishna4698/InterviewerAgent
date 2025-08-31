@@ -53,22 +53,19 @@
 
 import { generateText } from "ai";
 import { google } from "@ai-sdk/google";
-
 import { db } from "@/firebase/admin";
 import { getRandomInterviewCover } from "@/lib/utils";
+import { getCurrentUser } from "@/lib/actions/auth.action"; // adjust path if needed
 
 export async function POST(request: Request) {
+  const { type, role, level, techstack, amount } = await request.json();
+
+  const user = await getCurrentUser();
+  if (!user) {
+    return Response.json({ success: false, message: "Unauthorized" }, { status: 401 });
+  }
+
   try {
-    const body = await request.json();
-
-    // ✅ Extract args depending on workflow vs assistant
-    let args: any = body;
-    if (body?.message?.toolCallList?.[0]?.function?.arguments) {
-      args = JSON.parse(body.message.toolCallList[0].function.arguments);
-    }
-
-    const { type, role, level, techstack, amount, userid } = args;
-
     const { text: questions } = await generateText({
       model: google("gemini-2.0-flash-001"),
       prompt: `Prepare questions for a job interview.
@@ -92,7 +89,7 @@ export async function POST(request: Request) {
       level,
       techstack: techstack.split(","),
       questions: JSON.parse(questions),
-      userId: userid,
+      userId: user.id,
       finalized: true,
       coverImage: getRandomInterviewCover(),
       createdAt: new Date().toISOString(),
@@ -102,11 +99,7 @@ export async function POST(request: Request) {
 
     return Response.json({ success: true }, { status: 200 });
   } catch (error) {
-    console.error("Error in POST /api/generate:", error);
-    return Response.json({ success: false, error: String(error) }, { status: 500 });
+    console.error("Error:", error);
+    return Response.json({ success: false, error: error }, { status: 500 });
   }
-}
-
-export async function GET() {
-  return Response.json({ success: true, data: "Thank you!" }, { status: 200 });
 }

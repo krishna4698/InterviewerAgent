@@ -50,13 +50,13 @@ const AuthForm = ({ type }: { type: FormType }) => {
         const { name, email, password } = data;
 
         const userCredential = await createUserWithEmailAndPassword(
-          auth,
+          auth,  //firebase instance form auth=getauth()
           email,
           password
         );
 
         const result = await signUp({
-          uid: userCredential.user.uid,
+          uid: userCredential.user.uid,  //.user is property of usercredential object
           name: name!,
           email,
           password,
@@ -84,7 +84,7 @@ const AuthForm = ({ type }: { type: FormType }) => {
           return;
         }
 
-        await signIn({
+        await signIn({  // waiting to get the sigin after checking user email in database and then setsessioncookie(Idtoken)...
           email,
           idToken,
         });
