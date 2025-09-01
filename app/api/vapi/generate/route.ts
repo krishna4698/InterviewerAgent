@@ -3,8 +3,9 @@ import { google } from "@ai-sdk/google";
 
 import { db } from "@/firebase/admin";
 import { getRandomInterviewCover } from "@/lib/utils";
-
+import { getCurrentUser } from "@/lib/actions/auth.action";
 export async function POST(request: Request) {
+  // const user=await getCurrentUser();
   const { type, role, level, techstack, amount, userid } = await request.json();
 
   try {
