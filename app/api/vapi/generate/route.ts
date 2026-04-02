@@ -5,10 +5,14 @@ import { db } from "@/firebase/admin";
 import { getRandomInterviewCover } from "@/lib/utils";
 import { getCurrentUser } from "@/lib/actions/auth.action";
 export async function POST(request: Request) {
-  // const user=await getCurrentUser();
+  const user=await getCurrentUser();
+  console.log("user is from api/vapi/enereate is ", user);
+  
   const { type, role, level, techstack, amount, userid } = await request.json();
+  console.log("request from vapi is ", type, role,level, techstack,amount);
 
   try {
+
     const { text: questions } = await generateText({
       model: google("gemini-2.0-flash-001"),
       prompt: `Prepare questions for a job interview.
@@ -20,11 +24,12 @@ export async function POST(request: Request) {
         Please return only the questions, without any additional text.
         The questions are going to be read by a voice assistant so do not use "/" or "*" or any other special characters which might break the voice assistant.
         Return the questions formatted like this:
-        ["Question 1", "Question 2", "Question 3"]
+        ["Question 1", "Question 2", "Question 3"]  
         
         Thank you! <3
     `,
     });
+    console.log("questions enerated is :",questions);
 
     const interview = {
       role: role,
@@ -50,6 +55,7 @@ export async function POST(request: Request) {
 export async function GET() {
   return Response.json({ success: true, data: "Thank you!" }, { status: 200 });
 }
+    
 
 
 // import { generateText } from "ai";
