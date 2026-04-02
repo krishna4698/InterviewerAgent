@@ -8,13 +8,13 @@ export async function POST(request: Request) {
   const user=await getCurrentUser();
   console.log("user is from api/vapi/enereate is ", user);
   
-  const { type, role, level, techstack, amount, userid } = await request.json();
+  const { type, role, level, techstack, amount} = await request.json();
   console.log("request from vapi is ", type, role,level, techstack,amount);
 
   try {
 
     const { text: questions } = await generateText({
-      model: google("gemini-2.0-flash-001"),
+      model: google("gemini-2.5-flash"),
       prompt: `Prepare questions for a job interview.
         The job role is ${role}.
         The job experience level is ${level}.
@@ -37,7 +37,7 @@ export async function POST(request: Request) {
       level: level,
       techstack: techstack.split(","),
       questions: JSON.parse(questions),
-      userId: userid,
+      userId: user?.id,
       finalized: true,
       coverImage: getRandomInterviewCover(),
       createdAt: new Date().toISOString(),
