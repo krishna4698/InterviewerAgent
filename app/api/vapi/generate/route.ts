@@ -5,10 +5,11 @@ import { db } from "@/firebase/admin";
 import { getRandomInterviewCover } from "@/lib/utils";
 import { getCurrentUser } from "@/lib/actions/auth.action";
 export async function POST(request: Request) {
+
   const user=await getCurrentUser();
   console.log("user is from api/vapi/enereate is ", user);
   
-  const { type, role, level, techstack, amount} = await request.json();
+  const { type, role, level, techstack, amount, userId} = await request.json();
   console.log("request from vapi is ", type, role,level, techstack,amount);
 
   try {
@@ -37,7 +38,8 @@ export async function POST(request: Request) {
       level: level,
       techstack: techstack.split(","),
       questions: JSON.parse(questions),
-      userId: user?.id,
+      // userId: user?.id,
+      userId: userId,
       finalized: true,
       coverImage: getRandomInterviewCover(),
       createdAt: new Date().toISOString(),
