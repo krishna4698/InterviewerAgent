@@ -47,9 +47,18 @@ const Agent = ({
     const onMessage = (message: Message) => {
       if (message.type === "transcript" && message.transcriptType === "final") {
         const newMessage = { role: message.role, content: message.transcript };
-        setMessages((prev) => [...prev, newMessage]);
-      }
+        console.log("new messae is",newMessage);
+        setMessages((prev) => {
+           const updatedmessae= [...prev, newMessage]
+           console.log("updateMesaae",updatedmessae);
+           return updatedmessae;
+        }
+         
+      );
+      }  
     };
+  
+
 
     const onSpeechStart = () => {
       console.log("speech start");
@@ -100,7 +109,7 @@ const Agent = ({
       if (success && id) {
         router.push(`/interview/${interviewId}/feedback`);
       } else {
-        console.log("Error saving feedback");
+        console.log(" from agent ,Error saving feedback");
         router.push("/");
       }
     };
