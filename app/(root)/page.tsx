@@ -14,6 +14,7 @@ import {
 
 async function Home() {
   const user = await getCurrentUser();
+  console.log("tis is current user" ,user);
 
   const [userInterviews, allInterview] = await Promise.all([
     getInterviewsByUserId(user?.id!), // it is definded in general.actions
