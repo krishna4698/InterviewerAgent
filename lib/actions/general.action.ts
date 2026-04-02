@@ -48,6 +48,7 @@ export async function createFeedback(params: CreateFeedbackParams) {
       finalAssessment: object.finalAssessment,
       createdAt: new Date().toISOString(),
     };
+    console.log(feedback)
 
     let feedbackRef;
 
@@ -87,6 +88,8 @@ export async function getFeedbackByInterviewId(
   if (querySnapshot.empty) return null;
 
   const feedbackDoc = querySnapshot.docs[0];
+  console.log(feedbackDoc);
+  
   return { id: feedbackDoc.id, ...feedbackDoc.data() } as Feedback;
 }
 
